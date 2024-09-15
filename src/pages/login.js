@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import { useAuthStore } from '../store/useAuthStore'
@@ -8,7 +8,7 @@ export default function Login() {
   const [senha, setSenha] = useState('')
   const setUser = useAuthStore((state) => state.setUser)
   const setError = useAuthStore((state) => state.setError)
-  const error = useAuthStore((state) => state.error)
+  //const error = useAuthStore((state) => state.error)
   const router = useRouter()
 
   const handleLogin = async (e) => {
@@ -20,6 +20,7 @@ export default function Login() {
 
     if (error) {
       setError(error.message)
+      alert(error.message)
     } else {
       setUser(user)
       router.push('/')
@@ -56,7 +57,9 @@ export default function Login() {
         >
           Entrar
         </button>
-        {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+        <div className='w-full flex justify-center'>
+          <p onClick={() => router.push('/register')} className='text-white mt-6 text-center cursor-pointer underline'>Criar conta</p>
+        </div>
       </form>
     </div>
   )

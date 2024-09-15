@@ -9,8 +9,10 @@ export default function Register() {
   const [nome, setNome] = useState('')
   const [telefone, setTelefone] = useState('')
   const setError = useAuthStore((state) => state.setError)
-  const error = useAuthStore((state) => state.error)
+  //const error = useAuthStore((state) => state.error)
   const router = useRouter()
+
+  const goToLogin = () => { router.push('/login') }
 
   const handleRegister = async (e) => {
     e.preventDefault()
@@ -27,9 +29,10 @@ export default function Register() {
 
     if (error) {
       setError(error.message)
+      alert(error.message)
     } else {
       alert('Verifique seu email para confirmar o registro!')
-      router.push('/login')
+      goToLogin()
     }
   }
 
@@ -83,7 +86,9 @@ export default function Register() {
         >
           Registrar
         </button>
-        {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+        <div className='w-full flex justify-center'>
+          <p onClick={goToLogin} className='text-white mt-6 text-center cursor-pointer underline'>Ja tenho uma conta</p>
+        </div>
       </form>
     </div>
   )
