@@ -1,11 +1,11 @@
 import ProtectedRoute from '../components/ProtectedRoute'
 import { useAuthStore } from '../store/useAuthStore'
 import { supabase } from '../lib/supabaseClient'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import TaskCard from '../components/TaskCard'
-import { useRouter } from 'next/router'
 import Modal from '../components/Modal'
 import Spinner from '../components/Spinner'
+import { useRouter } from 'next/router'
 
 export default function Tasks() {
     const user = useAuthStore((state) => state.user)
@@ -14,13 +14,29 @@ export default function Tasks() {
     const [newTaskTitle, setNewTaskTitle] = useState('')
     const [newTaskDescription, setNewTaskDescription] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [shareCode, setShareCode] = useState('')
+    const [codeExpiry, setCodeExpiry] = useState(null)
     const router = useRouter()
 
-    useEffect(() => {
-        if (user) {
-            fetchTasks()
+    const handleGenerateShareCode = async () => {
+        const code = Math.random().toString(36).substr(2, 8)
+        const expiresAt = new Date(Date.now() + 10 * 60000).toISOString()
+
+        const { error } = await supabase.from('task_sharing').insert([
+            {
+                owner_id: user.id,
+                share_code: code,
+                expires_at: expiresAt,
+            },
+        ])
+
+        if (error) {
+            console.error('Erro ao gerar código de compartilhamento:', error)
+        } else {
+            setShareCode(code)
+            setCodeExpiry(expiresAt)
         }
-    }, [user])
+    }
 
     const fetchTasks = async () => {
         setLoading(true)
@@ -61,6 +77,13 @@ export default function Tasks() {
     const handleBackClick = () => {
         router.push('/')
     }
+
+
+    useEffect(() => {
+        if (user) {
+            fetchTasks()
+        }
+    }, [user])
 
     // Funções para manipular tarefas
     const handleCompleteTask = async (task) => {
@@ -145,7 +168,30 @@ export default function Tasks() {
                     >
                         Adicionar Tarefa
                     </button>
+                    <button
+                        onClick={handleGenerateShareCode}
+                        className="mb-6 md:ml-6 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
+                    >
+                        Gerar Código de Compartilhamento
+                    </button>
 
+                    {shareCode && (
+                        <div className="mb-6 bg-gray-800 p-4 rounded">
+                            <p className="text-white">
+                                Compartilhe este código para que alguém possa visualizar suas tarefas:
+                            </p>
+                            <p className="text-green-500 text-xl font-bold">{shareCode}</p>
+                            <p className="text-gray-400">
+                                Este código expira em {new Date(codeExpiry).toLocaleTimeString()}.
+                            </p>
+                            <button
+                                onClick={() => navigator.clipboard.writeText(shareCode)}
+                                className="mt-2 bg-gray-700 hover:bg-gray-600 text-white py-1 px-2 rounded"
+                            >
+                                Copiar Código
+                            </button>
+                        </div>
+                    )}
                     {/* Lista de Tarefas */}
                     {tasks.length > 0 ? (
                         tasks.map((task) => (
