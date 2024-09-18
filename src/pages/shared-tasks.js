@@ -55,7 +55,7 @@ export default function SharedTasks() {
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-900 p-4 flex flex-col items-center">
         <div className="flex w-full max-w-2xl items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-white text-center md:text-left">
+          <h1 className="text-3xl font-bold text-white md:text-left">
             Tarefas Compartilhadas
           </h1>
           <div className="flex space-x-2 mt-4 md:mt-0">

@@ -164,13 +164,13 @@ export default function Tasks() {
                     {/* Botão Adicionar Tarefa */}
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="mb-6 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
+                        className="w-full md:w-[250px] mb-4 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
                     >
                         Adicionar Tarefa
                     </button>
                     <button
                         onClick={handleGenerateShareCode}
-                        className="mb-6 md:ml-6 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
+                        className="w-full md:w-[406px] mb-6 md:ml-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
                     >
                         Gerar Código de Compartilhamento
                     </button>
