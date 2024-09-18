@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuthStore } from '../store/useAuthStore'
+import Spinner from './Spinner'
 
 export default function ProtectedRoute({ children }) {
   const user = useAuthStore((state) => state.user)
@@ -18,7 +19,11 @@ export default function ProtectedRoute({ children }) {
   }, [user, loading])
 
   if (loading) {
-    return <p>Carregando...</p>
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <Spinner />
+      </div>
+    )
   }
 
   if (!user) {

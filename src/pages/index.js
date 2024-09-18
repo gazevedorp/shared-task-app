@@ -31,7 +31,7 @@ export default function Home() {
           <div className="flex justify-center mt-8">
             <button
               onClick={handleTasksClick}
-              className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
+              className="w-[250px] bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
             >
               Minhas tarefas
             </button>
@@ -39,7 +39,7 @@ export default function Home() {
           <div className="flex justify-center mt-6">
             <button
               onClick={handleSharedTasksClick}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-200 w-64"
+              className="w-[250px] bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-200 w-64"
             >
               Tarefas Compartilhadas
             </button>
