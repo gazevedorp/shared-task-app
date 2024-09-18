@@ -38,7 +38,7 @@ export default function Register() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <form onSubmit={handleRegister} className="bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md">
+      <form onSubmit={handleRegister} className="bg-gray-800 p-4 py-8 rounded-lg shadow-md m-6 w-full max-w-md">
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Registrar</h2>
         <div className="mb-4">
           <input
@@ -86,9 +86,13 @@ export default function Register() {
         >
           Registrar
         </button>
-        <div className='w-full flex justify-center'>
-          <p onClick={goToLogin} className='text-white mt-6 text-center cursor-pointer underline'>Ja tenho uma conta</p>
-        </div>
+        <button
+          type='button'
+          onClick={() => router.push('/login')}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 mt-2 rounded transition duration-200"
+        >
+          Já tenho uma conta
+        </button>
       </form>
     </div>
   )

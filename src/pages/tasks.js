@@ -148,7 +148,7 @@ export default function Tasks() {
         <ProtectedRoute>
             <div className="relative min-h-screen bg-gray-900 p-4">
                 <div className="w-full max-w-2xl mx-auto">
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center justify-between mb-8">
                         <h1 className="text-3xl font-bold text-white text-center md:text-left">
                             Minhas Tarefas
                         </h1>
@@ -164,13 +164,13 @@ export default function Tasks() {
                     {/* Botão Adicionar Tarefa */}
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="w-full md:w-[250px] mb-4 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
+                        className="w-full md:w-[250px] mb-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
                     >
                         Adicionar Tarefa
                     </button>
                     <button
                         onClick={handleGenerateShareCode}
-                        className="w-full md:w-[406px] mb-6 md:ml-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
+                        className="w-full md:w-[414px] mb-6 md:ml-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-200"
                     >
                         Gerar Código de Compartilhamento
                     </button>

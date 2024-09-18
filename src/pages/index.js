@@ -36,7 +36,7 @@ export default function Home() {
               Minhas tarefas
             </button>
           </div>
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-2">
             <button
               onClick={handleSharedTasksClick}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-200 w-64"

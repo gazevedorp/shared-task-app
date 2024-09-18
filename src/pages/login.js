@@ -29,7 +29,7 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <form onSubmit={handleLogin} className="bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md">
+      <form onSubmit={handleLogin} className="bg-gray-800 p-4 py-8 rounded-lg shadow-md w-full m-6 max-w-md">
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Entrar</h2>
         <div className="mb-4">
           <input
@@ -57,9 +57,13 @@ export default function Login() {
         >
           Entrar
         </button>
-        <div className='w-full flex justify-center'>
-          <p onClick={() => router.push('/register')} className='text-white mt-6 text-center cursor-pointer underline'>Criar conta</p>
-        </div>
+        <button
+          type='button'
+          onClick={() => router.push('/register')}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 mt-2 rounded transition duration-200"
+        >
+          Criar conta
+        </button>
       </form>
     </div>
   )
