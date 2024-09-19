@@ -8,11 +8,13 @@ import { useRouter } from 'next/router'
 import Spinner from '../components/Spinner'
 
 export default function SharedTasks() {
+  const router = useRouter()
   const [shareCode, setShareCode] = useState('');
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const router = useRouter()
+  const [ownerFirstName, setOwnerFirstName] = useState('');
+  const [ownerName, setOwnerName] = useState('');
 
   const handleAccessSharedTasks = async (e) => {
     e.preventDefault();
@@ -36,6 +38,11 @@ export default function SharedTasks() {
       if (data.length === 0) {
         setError('Nenhuma tarefa encontrada com este código.');
       } else {
+        // Extrair o primeiro nome do usuário que compartilhou as tarefas
+        const fullName = data[0]?.full_name || '';
+        const firstName = fullName.split(' ')[0]; // Pegando o primeiro nome
+        setOwnerFirstName(firstName);
+        setOwnerName(fullName);
         setTasks(data);
       }
     } catch (err) {
@@ -45,7 +52,6 @@ export default function SharedTasks() {
 
     setLoading(false);
   };
-
 
   const handleBackClick = () => {
     router.push('/')
@@ -80,7 +86,7 @@ export default function SharedTasks() {
             type="submit"
             className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded"
           >
-            Acessar
+            Visualizar
           </button>
         </form>
 
@@ -93,7 +99,7 @@ export default function SharedTasks() {
 
         {tasks.length > 0 && (
           <div className="w-full max-w-2xl mt-8">
-            <h2 className="text-2xl font-bold text-white mb-4">Tarefas</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">Tarefas de {ownerName}</h2>
             {tasks.map((task) => (
               <TaskCard key={task.id} task={task} readOnly />
             ))}
