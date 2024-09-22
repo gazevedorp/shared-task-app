@@ -313,13 +313,15 @@ export default function Tasks() {
                         <Spinner />
                     </div>
                 )}
-                <div className="mt-8">
-                    <h2 className="text-2xl font-bold text-white mb-4">Compartilhado com:</h2>
+                <div className="w-full max-w-2xl mx-auto mt-2">
+                    {sharedWithUsers.length > 0 && (
+                        <text className="text-gray-400 text-sm mr-1">Compartilhado com:</text>
+                    )}
                     {sharedWithUsers.length > 0 ? (
-                        sharedWithUsers.map((user) => (
-                            <p key={user.shared_with} className="text-white">
-                                {user.full_name}
-                            </p>
+                        sharedWithUsers.map((user, index) => (
+                            <text key={user.shared_with} className="text-gray-400 text-sm">
+                                {index > 0 ? ", " : ""}{user.full_name}
+                            </text>
                         ))
                     ) : (
                         <p className="text-gray-400">Você não compartilhou suas tarefas com ninguém ainda.</p>

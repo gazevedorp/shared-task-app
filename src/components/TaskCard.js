@@ -2,10 +2,10 @@ import { FiCheckCircle, FiEdit2, FiTrash2, FiCircle } from 'react-icons/fi'
 
 export default function TaskCard({ task, onComplete, onEdit, onDelete, readOnly }) {
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow-md mb-4">
+    <div className="bg-gray-800 p-4 rounded-lg shadow-md mb-2">
       <div className="flex justify-between items-center">
         <h3
-          className={`text-xl font-semibold ${task.is_complete ? 'text-gray-500 line-through' : 'text-white'
+          className={`text-l text-sm ${task.is_complete ? 'text-gray-500 line-through' : 'text-white'
             }`}
         >
           {task.title}
@@ -38,7 +38,7 @@ export default function TaskCard({ task, onComplete, onEdit, onDelete, readOnly 
       </div>
       {task.description && (
         <p
-          className={`mt-2 ${task.is_complete ? 'text-gray-500 line-through' : 'text-gray-300'
+          className={`font-thin text-sm ${task.is_complete ? 'text-gray-500 line-through' : 'text-gray-300'
             }`}
         >
           {task.description}

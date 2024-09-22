@@ -124,30 +124,29 @@ export default function SharedTasks() {
             <Spinner />
           </div>
         )}
-        <h1 className="text-3xl font-bold text-white mt-6 mb-6 md:text-left">
-          Lista:
-        </h1>
-        {sharedUsers.map((user) => (
-          <div key={user.owner_id} className="mb-4">
-            <button
-              onClick={() => handleToggle(user.owner_id)}
-              className="w-full bg-gray-800 text-white py-2 px-4 rounded"
-            >
-              Tarefas de {user.full_name}
-            </button>
-            {expandedUserId === user.owner_id && (
-              <div className="mt-2">
-                {loadingTasks ? (
-                  <p className="text-white">Carregando tarefas...</p>
-                ) : (
-                  tasksByUser[user.owner_id]?.map((task) => (
-                    <TaskCard key={task.id} task={task} readOnly={true} />
-                  ))
-                )}
-              </div>
-            )}
-          </div>
-        ))}
+        <div class="w-full max-w-2xl">
+          {sharedUsers.map((user) => (
+            <div key={user.owner_id} className="w-full mb-4 mt-4">
+              <button
+                onClick={() => handleToggle(user.owner_id)}
+                className="w-full bg-gray-800 font-semibold text-left text-white py-2 px-4 rounded"
+              >
+                Tarefas de {user.full_name}
+              </button>
+              {expandedUserId === user.owner_id && (
+                <div className="mt-2">
+                  {loadingTasks ? (
+                    <p className="text-white">Carregando tarefas...</p>
+                  ) : (
+                    tasksByUser[user.owner_id]?.map((task) => (
+                      <TaskCard key={task.id} task={task} readOnly={true} />
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </ProtectedRoute >
   );
