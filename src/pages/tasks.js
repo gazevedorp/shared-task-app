@@ -17,6 +17,22 @@ export default function Tasks() {
     const [shareCode, setShareCode] = useState('')
     const [codeExpiry, setCodeExpiry] = useState(null)
     const router = useRouter()
+    const [sharedWithUsers, setSharedWithUsers] = useState([]);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [editTask, setEditTask] = useState(null)
+
+    useEffect(() => {
+        fetchSharedWithUsers();
+    }, []);
+
+    const fetchSharedWithUsers = async () => {
+        const { data, error } = await supabase.rpc('get_users_i_shared_with');
+        if (error) {
+            console.error('Erro ao buscar usuários:', error);
+        } else {
+            setSharedWithUsers(data);
+        }
+    };
 
     const handleGenerateShareCode = async () => {
         const code = Math.random().toString(36).substr(2, 8)
@@ -111,9 +127,6 @@ export default function Tasks() {
             }
         }
     }
-
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-    const [editTask, setEditTask] = useState(null)
 
     const handleEditTask = (task) => {
         setEditTask(task)
@@ -300,6 +313,18 @@ export default function Tasks() {
                         <Spinner />
                     </div>
                 )}
+                <div className="mt-8">
+                    <h2 className="text-2xl font-bold text-white mb-4">Compartilhado com:</h2>
+                    {sharedWithUsers.length > 0 ? (
+                        sharedWithUsers.map((user) => (
+                            <p key={user.shared_with} className="text-white">
+                                {user.full_name}
+                            </p>
+                        ))
+                    ) : (
+                        <p className="text-gray-400">Você não compartilhou suas tarefas com ninguém ainda.</p>
+                    )}
+                </div>
             </div>
         </ProtectedRoute>
     )

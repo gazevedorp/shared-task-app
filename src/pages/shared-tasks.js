@@ -1,6 +1,6 @@
 // pages/shared-tasks.js
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient'; // Ajuste o caminho conforme necessário
 import TaskCard from '../components/TaskCard'; // Certifique-se de que este componente existe
 import ProtectedRoute from '../components/ProtectedRoute'; // Se necessário
@@ -15,36 +15,64 @@ export default function SharedTasks() {
   const [error, setError] = useState('');
   const [ownerFirstName, setOwnerFirstName] = useState('');
   const [ownerName, setOwnerName] = useState('');
+  const [sharedUsers, setSharedUsers] = useState([]);
+  const [tasksByUser, setTasksByUser] = useState({});
+  const [expandedUserId, setExpandedUserId] = useState(null);
+  const [loadingTasks, setLoadingTasks] = useState(false);
+
+  useEffect(() => {
+    fetchSharedUsers();
+  }, []);
+
+  const fetchSharedUsers = async () => {
+    const { data, error } = await supabase.rpc('get_users_who_shared_with_me');
+    if (error) {
+      console.error('Erro ao buscar usuários:', error);
+    } else {
+      setSharedUsers(data);
+    }
+  };
+
+  const handleToggle = async (userId) => {
+    if (expandedUserId === userId) {
+      setExpandedUserId(null);
+    } else {
+      if (!tasksByUser[userId]) {
+        setLoadingTasks(true);
+        const { data, error } = await supabase.rpc('get_shared_tasks_by_user', { p_owner_id: userId });
+        if (error) {
+          console.error('Erro ao buscar tarefas:', error);
+        } else {
+          setTasksByUser((prev) => ({ ...prev, [userId]: data }));
+        }
+        setLoadingTasks(false);
+      }
+      setExpandedUserId(userId);
+    }
+  };
 
   const handleAccessSharedTasks = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     setTasks([]);
+    setOwnerFirstName('');
 
     try {
-      // Chamar a função RPC para obter as tarefas compartilhadas
-      const { data, error: rpcError } = await supabase.rpc('get_shared_tasks', {
+      // Chamar a função RPC para associar o código ao usuário atual
+      const { data, error: rpcError } = await supabase.rpc('associate_share_code', {
         p_share_code: shareCode,
       });
 
       if (rpcError) {
-        console.error('Erro ao acessar tarefas compartilhadas:', rpcError);
+        console.error('Erro ao associar o código de compartilhamento:', rpcError);
         setError('Código de compartilhamento inválido ou expirado.');
         setLoading(false);
         return;
       }
 
-      if (data.length === 0) {
-        setError('Nenhuma tarefa encontrada com este código.');
-      } else {
-        // Extrair o primeiro nome do usuário que compartilhou as tarefas
-        const fullName = data[0]?.full_name || '';
-        const firstName = fullName.split(' ')[0]; // Pegando o primeiro nome
-        setOwnerFirstName(firstName);
-        setOwnerName(fullName);
-        setTasks(data);
-      }
+      // Atualize a lista de usuários que compartilharam com você
+      fetchSharedUsers();
     } catch (err) {
       console.error('Erro inesperado:', err);
       setError('Ocorreu um erro ao tentar acessar as tarefas.');
@@ -96,16 +124,31 @@ export default function SharedTasks() {
             <Spinner />
           </div>
         )}
-
-        {tasks.length > 0 && (
-          <div className="w-full max-w-2xl mt-8">
-            <h2 className="text-2xl font-bold text-white mb-4">Tarefas de {ownerName}</h2>
-            {tasks.map((task) => (
-              <TaskCard key={task.id} task={task} readOnly />
-            ))}
+        <h1 className="text-3xl font-bold text-white mt-6 mb-6 md:text-left">
+          Lista:
+        </h1>
+        {sharedUsers.map((user) => (
+          <div key={user.owner_id} className="mb-4">
+            <button
+              onClick={() => handleToggle(user.owner_id)}
+              className="w-full bg-gray-800 text-white py-2 px-4 rounded"
+            >
+              Tarefas de {user.full_name}
+            </button>
+            {expandedUserId === user.owner_id && (
+              <div className="mt-2">
+                {loadingTasks ? (
+                  <p className="text-white">Carregando tarefas...</p>
+                ) : (
+                  tasksByUser[user.owner_id]?.map((task) => (
+                    <TaskCard key={task.id} task={task} readOnly={true} />
+                  ))
+                )}
+              </div>
+            )}
           </div>
-        )}
+        ))}
       </div>
-    </ProtectedRoute>
+    </ProtectedRoute >
   );
 }
